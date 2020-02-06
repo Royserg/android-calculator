@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String operator;
     private int value1 = 0;
+    private int value2 = 0;
     private TextView resultTextView;
 
     @Override
@@ -28,7 +29,14 @@ public class MainActivity extends AppCompatActivity {
 
         String current = (String) resultTextView.getText();
 
-        resultTextView.setText(current + number);
+        resultTextView.setText(String.format("%s%s", current, number));
+    }
+
+    public void onClearClicker(View view) {
+        value1 = 0;
+        value2 = 0;
+        resultTextView.setText("");
+        resultTextView.setHint("Clean :)");
     }
 
     public void onOperatorClicked(View view) {
@@ -42,16 +50,32 @@ public class MainActivity extends AppCompatActivity {
 
     public void onEqualClicked(View view) {
         // Save value2
-        int value2 = Integer.parseInt((String) resultTextView.getText());
+        value2 = Integer.parseInt((String) resultTextView.getText());
+        int result = 0;
 
         switch (operator) {
             case "+":
-                int result = value1 + value2;
-                resultTextView.setText(Integer.toString(result));
+                result = value1 + value2;
+                break;
+            case "-":
+                result = value1 - value2;
+                break;
+            case "x":
+                result = value1 * value2;
+                break;
+            case "/":
+                if (value2 == 0) {
+                    resultTextView.setText("");
+                    resultTextView.setHint("That's illegal");
+                    return;
+                }
+                result = value1 / value2;
                 break;
             default:
                 Log.d("MyApp", "I don't know");
                 break;
         }
+        // Show result
+        resultTextView.setText(Integer.toString(result));
     }
 }
